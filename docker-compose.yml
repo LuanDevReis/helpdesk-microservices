@@ -1,0 +1,53 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: helpdesk-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: helpdesk
+    ports:
+      - "3306:3306"
+    volumes:
+      - helpdesk_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: helpdesk-rabbitmq-compose
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  helpdesk-api:
+    build:
+      context: ../helpdesk
+    container_name: helpdesk-api
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: StringUsadaParaGerarTokenDoHelpDesk2026MuitoSegura1234567890ABCDEF
+    ports:
+      - "8080:8080"
+
+  notificacao-service:
+    build:
+      context: ../notificacao-service
+    container_name: notificacao-service
+    depends_on:
+      rabbitmq:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8081:8081"
+
+volumes:
+  helpdesk_mysql_data:
