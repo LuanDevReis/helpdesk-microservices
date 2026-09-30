@@ -24,7 +24,7 @@ services:
 
   helpdesk-api:
     build:
-      context: ../helpdesk
+      context: lreis393/helpdesk-api:dev
     container_name: helpdesk-api
     depends_on:
       mysql:
@@ -39,7 +39,7 @@ services:
 
   notificacao-service:
     build:
-      context: ../notificacao-service
+      context: lreis393/notificacao-service:dev
     container_name: notificacao-service
     depends_on:
       rabbitmq:
