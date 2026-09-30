@@ -1,10 +1,13 @@
 **Helpdesk Microservices**  
+
 Ambiente local com Docker Compose para executar os serviços do projeto Helpdesk.  
 Este ambiente sobe os seguintes containers:  
 - MySQL  
 - RabbitMQ  
 - Helpdesk API  
-- Notificação Service  
+- Notificação Service
+
+  
 **Arquitetura**  
 Fluxo principal da aplicação:  
 Usuário cria um chamado  
